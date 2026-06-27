@@ -1,0 +1,23 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "ad-generator",
+	"compatibility_date": "2026-06-27",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"main": "@tanstack/react-start/server-entry",
+	"observability": {
+		"enabled": true
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "ad-generator-db",
+			"database_id": "8f674499-6897-4b01-9752-0d300901f250",
+			"migrations_dir": "migrations"
+		}
+	],
+	"browser": {
+		"binding": "BROWSER"
+	}
+}

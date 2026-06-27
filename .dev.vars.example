@@ -1,0 +1,10 @@
+# Copy this file to `.dev.vars` and fill in your real key.
+# Get a key at https://console.anthropic.com  →  Settings → API Keys → Create Key.
+# You also need credit on the account (Billing). The key starts with "sk-ant-".
+#
+#   cp .dev.vars.example .dev.vars
+#
+# For the deployed Worker, set it as a secret instead (it is NOT read from .dev.vars):
+#   npx wrangler secret put ANTHROPIC_API_KEY
+
+ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
