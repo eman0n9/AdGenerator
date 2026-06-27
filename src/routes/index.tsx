@@ -185,8 +185,7 @@ function JobView({
   const j = job.job;
   const imagePool = j.images;
   const t = uiText(j.language);
-  // Images that fail to load in the browser (hotlink-protected) — reported up
-  // from the brand panel so the notice shows once, at the top, with the rest.
+
   const [imgFailed, setImgFailed] = useState<Set<string>>(new Set());
   useEffect(() => setImgFailed(new Set()), [j.id]);
 

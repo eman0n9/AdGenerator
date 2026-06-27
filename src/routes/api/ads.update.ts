@@ -6,11 +6,6 @@ import { db } from "../../../worker/db/index.ts";
 import { ads } from "../../../worker/db/schema.ts";
 import { getAd, rowToAd } from "../../../worker/db/repo.ts";
 
-/**
- * Edit an ad. Optimistic concurrency: the UPDATE is guarded by the version the
- * client last saw, so concurrent edits/regenerations can't silently overwrite
- * each other (409 with the current state on conflict).
- */
 export const Route = createFileRoute("/api/ads/update")({
   server: {
     handlers: {

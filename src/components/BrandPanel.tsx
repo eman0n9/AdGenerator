@@ -1,7 +1,6 @@
 import { servedImageUrl, type ExtractedImage, type Job } from "../../shared/types.ts";
 import { uiText } from "../i18n.ts";
 
-/** Renders a value, or an explicit "Not found" marker when it's missing/empty. */
 function Value({
   children,
   notFound,
@@ -13,8 +12,6 @@ function Value({
   return v ? <span>{v}</span> : <span className="not-found">{notFound}</span>;
 }
 
-/** Thumbnails that hide images which fail to load (e.g. hotlink-protected).
- *  Failures are reported up to the page so the notice shows once, at the top. */
 function Thumbs({
   images,
   failedImages,

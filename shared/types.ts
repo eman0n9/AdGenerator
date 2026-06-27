@@ -1,12 +1,5 @@
 import { z } from "zod";
 
-/**
- * Shared contracts between the server (TanStack Start server functions) and the
- * React client. Pure TypeScript + Zod — no Worker- or Node-specific imports.
- */
-
-// ---------- Brand brief (LLM extraction output, Haiku) ----------
-
 export const BrandBriefSchema = z.object({
   name: z.string(),
   tagline: z.string(),
@@ -17,17 +10,13 @@ export const BrandBriefSchema = z.object({
 });
 export type BrandBrief = z.infer<typeof BrandBriefSchema>;
 
-// ---------- Ad creative (LLM generation output, Sonnet) ----------
-// Fields mandated by the brief: creative concept, primary text, headline,
-// description, CTA, and a chosen image.
-
 export const AdDraftSchema = z.object({
   creativeConcept: z.string(),
   primaryText: z.string(),
   headline: z.string(),
   description: z.string(),
   cta: z.string(),
-  /** Index into the images array we passed the model, or null if none fits. */
+
   imageIndex: z.number().int().nullable(),
 });
 export type AdDraft = z.infer<typeof AdDraftSchema>;
@@ -37,20 +26,16 @@ export const AdsGenerationSchema = z.object({
 });
 export type AdsGeneration = z.infer<typeof AdsGenerationSchema>;
 
-// ---------- API resources ----------
-
 export type RenderMode = "plain" | "browser" | "failed";
 export type JobStatus = "ok" | "partial" | "failed";
 
 export interface ExtractedImage {
   url: string;
   alt: string | null;
-  /** R2 key if we cached the bytes, else null. */
+
   cacheKey: string | null;
 }
 
-/** Cached images are served from our own origin (sidesteps hotlink blocks);
- *  uncached ones use the original source URL. */
 export function servedImageUrl(img: ExtractedImage): string {
   return img.cacheKey ? `/api/img/${img.cacheKey}` : img.url;
 }

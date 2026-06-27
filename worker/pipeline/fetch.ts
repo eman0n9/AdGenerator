@@ -1,11 +1,4 @@
-/**
- * Page loading with graceful fallback.
- *
- * Strategy: try a cheap plain `fetch` first. If the response looks like an
- * unrendered SPA shell (little visible text, app-root markers, heavy script),
- * fall back to the Browser Rendering API. Every failure is reported as a
- * degradation reason rather than aborting the job.
- */
+
 import puppeteer from "@cloudflare/puppeteer";
 import type { Env } from "../lib/env.ts";
 import type { Budget } from "../lib/budget.ts";
@@ -74,7 +67,7 @@ export async function renderWithBrowser(
       try {
         await browser.close();
       } catch {
-        /* ignore */
+
       }
     }
   }

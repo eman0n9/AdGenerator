@@ -1,10 +1,4 @@
-/**
- * Extract structured signal from raw HTML using the Workers-native HTMLRewriter
- * (streaming parser, no DOM library needed).
- *
- * Produces the raw material the LLM turns into a brand brief, plus the inputs
- * for color and image extraction.
- */
+
 
 export interface ExtractedContent {
   title: string;
@@ -12,15 +6,15 @@ export interface ExtractedContent {
   siteName: string;
   ogImage: string | null;
   themeColor: string | null;
-  /** Strong color priors from <link mask-icon> / msapplication-TileColor. */
+
   colorHints: string[];
-  /** hrefs of linked stylesheets — fetched later for color extraction. */
+
   stylesheets: string[];
   headings: string[];
   paragraphs: string[];
   rawImages: { src: string; alt: string | null }[];
   styleText: string;
-  /** Visible text length — used to decide if a plain fetch got real content. */
+
   textLength: number;
 }
 
@@ -30,7 +24,6 @@ const MAX_PARAGRAPH_LEN = 600;
 const MAX_IMAGES = 60;
 const MAX_STYLE_LEN = 200_000;
 
-/** Accumulates text content per matched element instance. */
 class TextList {
   items: string[] = [];
   private current: string | null = null;

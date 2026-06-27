@@ -11,10 +11,6 @@ import { regenerateOneAd } from "../../../worker/llm/ads.ts";
 import { languageInstruction } from "../../../worker/llm/schemas.ts";
 import { imageUrlFor } from "../../../worker/pipeline/run.ts";
 
-/**
- * Regenerate a single ad in place using the cached brand brief. Touches only
- * this ad's row (version-guarded) and the job's running cost — never the rest.
- */
 export const Route = createFileRoute("/api/ads/regenerate")({
   server: {
     handlers: {

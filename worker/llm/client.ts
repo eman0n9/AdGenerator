@@ -1,10 +1,4 @@
-/**
- * Thin wrapper over the Anthropic SDK that:
- *  - forces structured (JSON-schema) output,
- *  - records token usage/cost into the job Budget,
- *  - surfaces refusals explicitly,
- *  - supports a cacheable system block for prompt caching.
- */
+
 import Anthropic from "@anthropic-ai/sdk";
 import type { Budget } from "../lib/budget.ts";
 
@@ -16,11 +10,11 @@ export class RefusalError extends Error {}
 
 interface StructuredCall {
   model: string;
-  /** Stable instructions — cached for prompt caching. */
+
   system: string;
-  /** Extra stable context appended to system (e.g. brand brief), also cached. */
+
   cachedContext?: string;
-  /** The volatile per-request instruction. */
+
   user: string;
   schema: unknown;
   maxTokens: number;
@@ -39,7 +33,7 @@ export async function callStructured(
       cache_control: { type: "ephemeral" },
     });
   } else {
-    // cache the instruction block itself (cheap, helps repeated calls)
+
     system[0].cache_control = { type: "ephemeral" };
   }
 

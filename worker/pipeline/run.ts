@@ -1,10 +1,4 @@
-/**
- * Job orchestrator: load → extract → analyze → generate → persist.
- *
- * Each stage is wrapped so a failure becomes a recorded degradation reason
- * instead of aborting the whole job. The job's final `status` reflects how
- * complete the result is, and the reasons explain *why* anything is missing.
- */
+
 import type { Env } from "../lib/env.ts";
 import { Budget } from "../lib/budget.ts";
 import { fetchPlain, looksLikeSpa, renderWithBrowser } from "./fetch.ts";
@@ -45,7 +39,6 @@ export async function runJob(
   const langInstr = languageInstruction(language);
   let renderMode: RenderMode = "failed";
 
-  // 1. Load the page: plain fetch, with SPA fallback to the browser.
   let html = "";
   const plain = await fetchPlain(url, budget);
   if (plain.ok) {
@@ -69,7 +62,7 @@ export async function runJob(
     } else {
       reasons.push(rendered.reason ?? "Browser rendering failed.");
       if (!plain.ok) {
-        // Nothing loaded at all — persist a failed job and return.
+
         return persist(env, url, {
           status: "failed",
           renderMode: "failed",
@@ -99,17 +92,15 @@ export async function runJob(
     });
   }
 
-  // 2. Colors: inline <style> + linked CSS (best-effort), with strong priors.
   let cssText = content.styleText;
   try {
     const sheetCss = await fetchStylesheetText(content.stylesheets, url, budget);
     if (sheetCss) cssText += "\n" + sheetCss;
   } catch {
-    /* best-effort */
+
   }
   const colors = extractColors([content.themeColor, ...content.colorHints], cssText);
 
-  // 3. Images: resolve + filter + URL dedup (content-hash dedup deferred with R2).
   let images: ExtractedImage[] = [];
   try {
     images = selectImages(content.rawImages, content.ogImage, url);
@@ -117,7 +108,7 @@ export async function runJob(
     reasons.push(`Image processing skipped: ${errMsg(e)}`);
   }
 
-  // 4. LLM brief + ads (tiered: Haiku then Sonnet). Skipped without an API key.
+
   let brief: BrandBrief | null = null;
   let drafts: AdDraft[] = [];
 
@@ -130,12 +121,12 @@ export async function runJob(
     } catch (e) {
       reasons.push(llmReason("Brand brief", e));
     }
-    // Drop other companies' logos (client/partner marks) URL heuristics can't catch.
+
     if (brief && images.length > 1 && !budget.exhausted()) {
       try {
         images = await filterBrandImages(client, budget, brief.name, url, images);
       } catch {
-        /* keep the heuristic-filtered list on failure */
+
       }
     }
     if (brief && !budget.exhausted()) {
@@ -149,8 +140,7 @@ export async function runJob(
     }
   }
 
-  // "ok" once we have a brief and at least one ad — benign notes (browser used,
-  // a few images dropped) are still listed as context but don't downgrade status.
+
   const status: JobStatus =
     brief && drafts.length > 0 ? "ok" : "partial";
 
@@ -224,7 +214,7 @@ async function persist(env: Env, url: string, input: PersistInput): Promise<JobR
   return result;
 }
 
-/** Resolve an image index to a displayable URL, falling back when the model omits one. */
+
 export function imageUrlFor(idx: number | null, images: ExtractedImage[]): string | null {
   if (images.length === 0) return null;
   if (idx === null || idx < 0 || idx >= images.length) return servedImageUrl(images[0]);

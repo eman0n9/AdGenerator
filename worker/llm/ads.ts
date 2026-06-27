@@ -32,7 +32,7 @@ export async function generateAds(
   return parsed.ads.slice(0, count);
 }
 
-/** Regenerate a single fresh ad, distinct from the ones the user already has. */
+
 export async function regenerateOneAd(
   client: Anthropic,
   budget: Budget,

@@ -29,11 +29,6 @@ function basename(url: string): string {
   }
 }
 
-/**
- * Removes third-party (client/partner) logos that URL heuristics can't catch —
- * e.g. a competitor's logo stored under /images/<Company>.png. Cheap Haiku call;
- * on any failure the original list is returned (never throws).
- */
 export async function filterBrandImages(
   client: Anthropic,
   budget: Budget,
@@ -63,6 +58,6 @@ export async function filterBrandImages(
   const keepSet = new Set(keep.filter((n): n is number => Number.isInteger(n)));
   const filtered = images.filter((_, i) => keepSet.has(i));
 
-  // Guard against an over-eager drop wiping everything out.
+
   return filtered.length > 0 ? filtered : images;
 }

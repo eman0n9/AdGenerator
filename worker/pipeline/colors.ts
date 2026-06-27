@@ -1,20 +1,10 @@
-/**
- * Heuristic brand-color extraction.
- *
- * Priors (theme-color, mask-icon, tile color) are trusted strongly. Beyond that
- * we rank hex / rgb() colors by frequency across inline <style> AND linked CSS
- * files (modern sites keep brand colors in external stylesheets, not inline),
- * dropping near-white / near-black / unsaturated values.
- *
- * A more precise approach (k-means over the logo / og:image pixels) is noted as
- * deferred in the README.
- */
+
 import type { Budget } from "../lib/budget.ts";
 
 function normalizeHex(hex: string): string | null {
   let h = hex.replace("#", "").toLowerCase();
   if (h.length === 3) h = h.split("").map((c) => c + c).join("");
-  if (h.length === 8) h = h.slice(0, 6); // drop alpha
+  if (h.length === 8) h = h.slice(0, 6);
   if (!/^[0-9a-f]{6}$/.test(h)) return null;
   return "#" + h;
 }
@@ -32,8 +22,8 @@ function isBoring(hex: string): boolean {
   const min = Math.min(r, g, b);
   const lightness = (max + min) / 2;
   const saturation = max === min ? 0 : (max - min) / (255 - Math.abs(max + min - 255));
-  if (lightness > 240 || lightness < 18) return true; // near-white / near-black
-  if (saturation < 0.12) return true; // greyscale
+  if (lightness > 240 || lightness < 18) return true;
+  if (saturation < 0.12) return true;
   return false;
 }
 
@@ -45,7 +35,7 @@ export function extractColors(priors: (string | null)[], css: string, max = 5): 
   };
 
   for (const p of priors) {
-    if (p) add(normalizeHex(p.trim()), 1000); // strong prior
+    if (p) add(normalizeHex(p.trim()), 1000);
   }
 
   for (const m of css.match(/#[0-9a-fA-F]{3,8}\b/g) ?? []) {
@@ -64,7 +54,6 @@ export function extractColors(priors: (string | null)[], css: string, max = 5): 
   return [...new Set(ranked)].slice(0, max);
 }
 
-/** Best-effort fetch of a couple of linked stylesheets to scan for brand colors. */
 export async function fetchStylesheetText(
   hrefs: string[],
   baseUrl: string,

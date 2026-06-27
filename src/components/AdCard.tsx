@@ -12,14 +12,13 @@ const MAX_UPLOAD_BYTES = 1_500_000;
 
 interface Props {
   ad: Ad;
-  /** All images found for the job — choices for "replace image". */
+
   imagePool: ExtractedImage[];
   language: string;
   onAdSaved: (ad: Ad) => void;
   onJobUpdated: (job: JobResponse) => void;
 }
 
-/** Reads a file into a self-contained data: URL (stored in D1 on save). */
 function readAsDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -45,7 +44,7 @@ export function AdCard({ ad, imagePool, language, onAdSaved, onJobUpdated }: Pro
   const [error, setError] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
-  // Track images that failed to load so we don't cycle back to them.
+
   const failedRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
@@ -60,8 +59,6 @@ export function AdCard({ ad, imagePool, language, onAdSaved, onJobUpdated }: Pro
     failedRef.current = new Set();
   }, [ad.id, ad.version, fallbackImageUrl]);
 
-  // If the chosen image can't be displayed (e.g. hotlink-protected source),
-  // fall through to the next image that does load; placeholder if none do.
   function onImageError() {
     if (imageUrl) failedRef.current.add(imageUrl);
     const next = poolUrls.find((u) => !failedRef.current.has(u));

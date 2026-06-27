@@ -147,7 +147,7 @@ body {
   max-width: 14ch;
 }
 
-/* prompt box */
+
 .prompt {
   position: relative;
   max-width: 720px;
@@ -244,7 +244,7 @@ body {
   font-size: 15px;
 }
 
-/* centered results column (mirrors the hero's centered feel) */
+
 .results {
   max-width: 920px;
   margin: 0 auto;
@@ -255,7 +255,6 @@ body {
   text-align: center;
 }
 
-/* compact search bar shown with results — same glassy look as the hero prompt */
 .searchbar {
   display: flex;
   flex-direction: column;
@@ -287,7 +286,7 @@ body {
   margin-left: auto;
 }
 
-/* small screens: form controls go full-width so nothing overflows */
+
 @media (max-width: 560px) {
   .searchbar-row {
     flex-wrap: wrap;
@@ -310,7 +309,6 @@ body {
   }
 }
 
-/* shared inputs / buttons */
 input,
 textarea,
 select {
@@ -641,7 +639,7 @@ button.secondary {
   border-radius: var(--radius);
 }
 
-/* explicit "missing data" marker (per spec: show Not found, not blank) */
+
 .not-found {
   color: var(--muted);
   font-style: italic;

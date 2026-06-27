@@ -1,14 +1,7 @@
-/**
- * JSON schemas for Anthropic structured outputs + prompt builders.
- *
- * We hand-write the JSON schemas (rather than deriving from Zod) to stay within
- * the structured-output schema subset, and validate the response with Zod at
- * runtime in brief.ts / ads.ts.
- */
+
 import { LANGUAGES, type BrandBrief, type ExtractedImage } from "../../shared/types.ts";
 import type { ExtractedContent } from "../pipeline/extract.ts";
 
-/** Builds the output-language directive appended to both system prompts. */
 export function languageInstruction(code: string | null | undefined): string {
   const lang = LANGUAGES.find((l) => l.code === code);
   if (!lang || !lang.name) {
@@ -101,7 +94,7 @@ export const ADS_SYSTEM =
   "If any images are available, every ad MUST set `imageIndex` to one of their indexes; use null only when AVAILABLE IMAGES is (none). " +
   "Make the ads distinct in angle and wording.";
 
-/** Stable, cacheable context block: the brief + available images. */
+
 export function buildAdsContext(brief: BrandBrief, images: ExtractedImage[]): string {
   const imgLines = images.length
     ? images
